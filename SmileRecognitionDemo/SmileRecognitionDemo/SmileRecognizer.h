@@ -54,6 +54,7 @@ private:
 	// LIBSVM model file
 	const char *MODEL_FILENAME = "linear.model";
 
+	// SmileRecognizer private member
 	cv::HOGDescriptor *featureDescriptor;
 	struct svm_model *recognitionModel;
 };

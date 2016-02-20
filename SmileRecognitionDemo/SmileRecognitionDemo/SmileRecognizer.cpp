@@ -46,12 +46,20 @@ double SmileRecognizer::Recognize(const cv::Mat faceImage) {
 	std::vector<float> descriptorValue;
 	featureDescriptor->compute(recognitionImage, descriptorValue);
 
-	// copy the descriptor value to LIBSVM structure and do recognition
+	// copy the descriptor value to LIBSVM structure
 	struct svm_node *svmNode = new svm_node[FEATURE_DIMENSION];
-	for (int i = 0; i < FEATURE_DIMENSION; i++){
+	for (int i = 0; i < FEATURE_DIMENSION; ++i) {
 		svmNode[i].value = descriptorValue[i];
 		svmNode[i].index = i;
 	}
 
-	return svm_predict(recognitionModel, svmNode);
+	// do recognition
+	double reconitionValue = svm_predict(recognitionModel, svmNode);
+
+	// release memory
+	recognitionImage.release();
+	descriptorValue.clear();
+	delete svmNode;
+
+	return reconitionValue;
 }
